@@ -56,13 +56,13 @@
         <!-- Arah ke route 'beranda' -->
         <li><a href="{{ route('beranda') }}">Beranda</a></li>
 
-        <!-- Scroll dalam halaman beranda -->
+        {{-- <!-- Scroll dalam halaman beranda -->
         <li><a href="{{ route('beranda') }}#about">Tentang</a></li>
         <li><a href="{{ route('beranda') }}#assistance">Pelayanan</a></li>
         <li><a href="{{ route('beranda') }}#favorite">Favorit</a></li>
         <li><a href="{{ route('beranda') }}#faq">Tips</a></li>
         <li><a href="{{ route('jelajah') }}">Jelajah</a></li>
-        <li><a href="{{ route('beranda') }}#contact">Kontak</a></li>
+        <li><a href="{{ route('beranda') }}#contact">Kontak</a></li> --}}
 
         @auth('web')
             <li><a href="{{ route('akun') }}">Akun</a></li>
