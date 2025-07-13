@@ -51,10 +51,11 @@ class GunungController extends Controller
         $pengalamans = $gunung->pengalaman;
         $tours = $gunung->tour;
         $favoritCount = $gunung->favorit->count();
-    
+        
         // Jumlah
         $jumlahPengalaman = $pengalamans->count();
         $jumlahTour = $tours->count();
+        
     
         return view('detail-gunung', compact('gunung', 'pengalamans', 'tours' , 'jumlahPengalaman' , 'jumlahTour' , 'favoritCount' , 'pengalaman', 'tour', 'pengalamans', 'forecast'));
     }

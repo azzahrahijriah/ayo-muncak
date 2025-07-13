@@ -6,6 +6,10 @@ use App\Models\Gunung;
 use Illuminate\Http\Request;
 use App\Models\Pengalaman;
 use App\Models\Tour;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 
 class AdminGunungController extends Controller
 {
@@ -39,7 +43,7 @@ class AdminGunungController extends Controller
     // Menyimpan data gunung baru ke dalam database
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'provinsi' => 'required|string|max:255',
             'daerah' => 'required|string|max:255',
@@ -52,29 +56,50 @@ class AdminGunungController extends Controller
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:5048',
         ]);
 
-        $data = $request->except('gambar');
+        DB::beginTransaction();
 
-        if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $originalName = $file->getClientOriginalName();
-            $newFileName = time() . '-' . $originalName;
-            $file->storeAs('public/gambar-gunung', $newFileName);
-            $data['gambar'] = 'gambar-gunung/' . $newFileName;
-        } else {
-            $data['gambar'] = 'gambar-gunung/default-image.jpg'; // Gambar default jika tidak ada file di-upload
+        try {
+            if ($request->hasFile('gambar')) {
+                $file = $request->file('gambar');
+                $newFileName = time() . '-' . $file->getClientOriginalName();
+
+                // Simpan ke public disk (storage/app/public/gambar-gunung)
+                $path = $file->storeAs('gambar-gunung', $newFileName, 'public');
+
+                $validated['gambar'] = $path;
+                Log::info('Gambar berhasil diupload.', ['path' => $path]);
+            } else {
+                $validated['gambar'] = 'gambar-gunung/default-image.jpg';
+            }
+
+            $gunung = Gunung::create($validated);
+
+            Log::info('Gunung baru berhasil ditambahkan.', [
+                'user_id' => auth()->id(),
+                'gunung_id' => $gunung->id,
+                'nama' => $gunung->nama,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('admin.gunung.index')->with('success', 'Gunung berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Log::error('Gagal menambahkan gunung.', [
+                'user_id' => auth()->id(),
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data.'])->withInput();
         }
-
-        Gunung::create($data);
-
-        return redirect()->route('admin.gunung.index')->with('success', 'Gunung berhasil ditambahkan!');
     }
-
 
 
     // Memperbarui data gunung yang sudah ada
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'provinsi' => 'required|string|max:255',
             'daerah' => 'required|string|max:255',
@@ -82,44 +107,57 @@ class AdminGunungController extends Controller
             'deskripsi' => 'required|string',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
-            'jalur' => 'nullable|string',
+            'jalur' => 'nullable|string|max:255',
             'rating' => 'nullable|numeric|min:0|max:5',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:5048',
         ]);
-
-        $gunung = Gunung::findOrFail($id);
-        $gunung->nama = $request->input('nama');
-        $gunung->provinsi = $request->input('provinsi');
-        $gunung->daerah = $request->input('daerah');
-        $gunung->ketinggian = $request->input('ketinggian');
-        $gunung->deskripsi = $request->input('deskripsi');
-        $gunung->latitude = $request->input('latitude');
-        $gunung->longitude = $request->input('longitude');
-        $gunung->jalur = $request->input('jalur');
-        $gunung->rating = $request->input('rating');
-
-        if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika ada
-            if ($gunung->gambar && \Storage::exists('public/' . $gunung->gambar)) {
-                \Storage::delete('public/' . $gunung->gambar);
+    
+        DB::beginTransaction();
+    
+        try {
+            $gunung = Gunung::findOrFail($id);
+            $oldData = $gunung->toArray();
+    
+            if ($request->hasFile('gambar')) {
+                // Hapus gambar lama jika bukan default
+                if ($gunung->gambar && $gunung->gambar !== 'gambar-gunung/default-image.jpg') {
+                    Storage::disk('public')->delete($gunung->gambar);
+                }
+    
+                $file = $request->file('gambar');
+                $newFileName = time() . '-' . $file->getClientOriginalName();
+    
+                $path = $file->storeAs('gambar-gunung', $newFileName, 'public');
+                $validated['gambar'] = $path;
+    
+                Log::info('Gambar berhasil diupdate.', ['path' => $path]);
             }
-
-            // Ambil file gambar yang diupload
-            $file = $request->file('gambar');
-            // Ambil nama file asli
-            $originalName = $file->getClientOriginalName();
-            // Ubah nama file menjadi format baru
-            $newFileName = time() . '-' . $originalName;
-            // Simpan file gambar dengan nama baru di folder public
-            $file->storeAs('public/gambar-gunung', $newFileName);
-            // Simpan path gambar ke database
-            $gunung->gambar = 'gambar-gunung/' . $newFileName;
+    
+            $gunung->update($validated);
+    
+            Log::info('Data gunung diperbarui.', [
+                'user_id' => auth()->id(),
+                'gunung_id' => $gunung->id,
+                'before' => $oldData,
+                'after' => $validated,
+            ]);
+    
+            DB::commit();
+    
+            return redirect()->route('admin.gunung.index')->with('success', 'Data gunung berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+    
+            Log::error('Gagal memperbarui data gunung.', [
+                'user_id' => auth()->id(),
+                'gunung_id' => $id,
+                'error' => $e->getMessage(),
+            ]);
+    
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui data.'])->withInput();
         }
-
-        $gunung->save();
-
-        return redirect()->route('admin.gunung.index')->with('success', 'Data gunung berhasil diperbarui.');
     }
+    
 
     public function edit($id)
     {

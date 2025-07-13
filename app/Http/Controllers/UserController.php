@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
 
@@ -46,7 +47,7 @@ class UserController extends Controller
 
     public function showLogin()
     {
-            // **Perbaikan**: harus ->check(), bukan hanya Auth::guard()
+        // **Perbaikan**: harus ->check(), bukan hanya Auth::guard()
         if (Auth::guard('web')->check()) {
             return redirect()->route('jelajah');
         }
@@ -111,53 +112,80 @@ class UserController extends Controller
 
         // Menangani update data user
         // Menangani update data user
-    public function update(Request $request)
-    {
-        $user = auth()->user();
-
-        $request->validate([
-            'username'     => ['required', 'string', 'max:255', Rule::unique('users')->ignore(auth()->user()->id_user, 'id_user')],
-            'password'     => 'nullable|string|min:6',
-            'nama_lengkap' => 'required|string|max:255',
-            'bio'          => 'nullable|string',
-            'instagram'    => 'nullable|string|max:255',
-            'tiktok'       => 'nullable|string|max:255',
-            'youtube'      => 'nullable|string|max:255',
-            'avatar'       => 'nullable|image|mimes:jpg,jpeg,png|max:5048',
-        ]);
-
-            // Handle avatar upload
-        if ($request->hasFile('avatar')) {
-                // Hapus avatar lama jika ada
-            if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
-                Storage::delete('public/' . $user->avatar);
+        public function update(Request $request)
+        {
+            $user = auth()->user();
+        
+            $validated = $request->validate([
+                'username'     => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id_user, 'id_user')],
+                'password'     => 'nullable|string|min:6',
+                'nama_lengkap' => 'required|string|max:255',
+                'bio'          => 'nullable|string',
+                'instagram'    => 'nullable|string|max:255',
+                'tiktok'       => 'nullable|string|max:255',
+                'youtube'      => 'nullable|string|max:255',
+                'avatar'       => 'nullable|image|mimes:jpg,jpeg,png|max:5048',
+            ]);
+        
+            DB::beginTransaction();
+        
+            try {
+                $oldData = $user->toArray(); // untuk log perbandingan data lama
+        
+                // Handle avatar upload
+                if ($request->hasFile('avatar')) {
+                    // Hapus avatar lama jika bukan default dan ada di disk
+                    if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                        Storage::disk('public')->delete($user->avatar);
+                        Log::info('Avatar lama dihapus', ['path' => $user->avatar]);
+                    }
+        
+                    // Simpan avatar baru
+                    $file = $request->file('avatar');
+                    $newFileName = time() . '-' . $file->getClientOriginalName();
+                    $path = $file->storeAs('avatars', $newFileName, 'public');
+        
+                    $validated['avatar'] = $path;
+        
+                    Log::info('Avatar baru diupload', ['path' => $path]);
+                }
+        
+                // Update data user
+                $user->username     = $validated['username'];
+                $user->nama_lengkap = $validated['nama_lengkap'];
+                $user->bio          = $validated['bio'] ?? null;
+                $user->instagram    = $validated['instagram'] ?? null;
+                $user->tiktok       = $validated['tiktok'] ?? null;
+                $user->youtube      = $validated['youtube'] ?? null;
+        
+                if (!empty($validated['avatar'])) {
+                    $user->avatar = $validated['avatar'];
+                }
+        
+                if ($request->filled('password')) {
+                    $user->password = Hash::make($validated['password']);
+                }
+        
+                $user->save();
+        
+                Log::info('Akun pengguna diperbarui.', [
+                    'user_id' => $user->id_user,
+                    'before' => $oldData,
+                    'after' => $user->toArray(),
+                ]);
+        
+                DB::commit();
+        
+                return redirect()->route('akun')->with('success', 'Akun berhasil diperbarui');
+            } catch (\Exception $e) {
+                DB::rollBack();
+        
+                Log::error('Gagal memperbarui akun.', [
+                    'user_id' => $user->id_user,
+                    'error' => $e->getMessage(),
+                ]);
+        
+                return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat memperbarui akun.'])->withInput();
             }
-
-                // Ambil file avatar yang diupload
-            $file = $request->file('avatar');
-                // Ambil nama file asli
-            $originalName = $file->getClientOriginalName();
-                // Ubah nama file menjadi format baru
-            $newFileName = time() . '-' . $originalName;
-                // Simpan file avatar dengan nama baru di folder public
-            $file->storeAs('avatars', $newFileName, 'public');
-                // Simpan path avatar ke database
-            $user->avatar = 'avatars/' . $newFileName;
-        }
-
-        $user->username     = $request->username;
-        $user->nama_lengkap = $request->nama_lengkap;
-        $user->bio          = $request->bio;
-        $user->instagram    = $request->instagram;
-        $user->tiktok       = $request->tiktok;
-        $user->youtube      = $request->youtube;
-
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->password);
-        }
-
-        $user->save();
-
-        return redirect()->route('akun')->with('success', 'Akun berhasil diperbarui');
         }
 }

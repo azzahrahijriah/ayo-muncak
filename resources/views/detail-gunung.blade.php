@@ -301,7 +301,6 @@
                                                 mendapatkan informasi lebih detail per periode 3 jam.
                                             </div>
                                         </div>
-                            
                                         @php
                                             $groupedByDate = collect($forecast['hourly'])->groupBy(function ($item) {
                                                 return date('l, d M Y', $item['dt']);
