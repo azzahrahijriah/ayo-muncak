@@ -149,9 +149,9 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-border-bottom-0">
-                                        @foreach ($gunungs as $gunung)
+                                        @foreach ($gunungs as $index => $gunung)
                                         <tr>
-                                            <td class="kolom-no">{{ $gunung->id}}</td>
+                                            <td class="kolom-no">{{ $index + 1}}</td>
                                             <td>{{ $gunung->nama }}</td>
                                             <td class="kolom">{{ $gunung->daerah }}</td>
                                             <td>{{ number_format($gunung->ketinggian, 3, ',', '.') }} Mdpl</td>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pengalaman;
 use App\Models\Gunung;  // Import Gunung model
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AdminPengalamanController extends Controller
 {
@@ -58,9 +60,26 @@ class AdminPengalamanController extends Controller
 
     public function destroy($id)
     {
-        $pengalaman = Pengalaman::findOrFail($id);
-        $pengalaman->delete();  // Hapus data pengalaman
-
-        return redirect()->route('admin.pengalaman.index')->with('success', 'Pengalaman deleted successfully.');
+        DB::beginTransaction();
+        
+        try {
+            $pengalaman = Pengalaman::findOrFail($id);
+            
+            // Remove the dd() debug statement in production
+            
+            $pengalaman->delete();
+            
+            DB::commit();
+            
+            Log::info('Pengalaman deleted - ID: ' . $id);
+            return redirect()->route('admin.pengalaman.index')
+                   ->with('success', 'Pengalaman berhasil dihapus.');
+                   
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error deleting pengalaman - ID: ' . $id . ' - Error: ' . $e->getMessage());
+            return redirect()->route('admin.pengalaman.index')
+                   ->with('error', 'Gagal menghapus pengalaman.');
+        }
     }
 }
