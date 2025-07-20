@@ -45,16 +45,22 @@
                             <div data-i18n="Tables">Data Gunung</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ request()->routeIs('admin.pengalaman.*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->routeIs('admin.pengalaman.index') ? 'active open' : '' }}">
                         <a href="{{ route('admin.pengalaman.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-list-check"></i>
                             <div data-i18n="Experiences">Data Pengalaman</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ request()->routeIs('admin.tour.*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->routeIs('admin.tour.index') ? 'active open' : '' }}">
                         <a href="{{ route('admin.tour.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-box"></i>
                             <div data-i18n="Tours">Data Tour</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ request()->routeIs('admin.user.index') ? 'active open' : '' }}">
+                        <a href="{{ route('admin.user.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-user"></i>
+                            <div data-i18n="Tables">Data User</div>
                         </a>
                     </li>
                 </ul>

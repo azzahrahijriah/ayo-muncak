@@ -20,27 +20,11 @@
     <script src="{{ asset('asset/js/config.js') }}"></script>
 
     <style>
-        .table .column-jalur {
-            max-width: 150px;
-            /* Atur lebar kolom sesuai kebutuhan */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .kolom {
-    width: 300px;
-    white-space: nowrap; /* Agar tidak pecah baris */
+.text-truncate {
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Tambahkan jika ingin "..." saat terlalu panjang */
+    text-overflow: ellipsis;
 }
-.kolom-no {
-    width: 10px;
-    white-space: nowrap; /* Agar tidak pecah baris */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Tambahkan jika ingin "..." saat terlalu panjang */
-}
-
-
 
     </style>
 
@@ -64,8 +48,8 @@
                             <div data-i18n="Dashboards">Dashboard Admin</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ request()->routeIs('admin.gunung.index') ? 'active open' : '' }}">
-                        <a href="{{ route('admin.gunung.index') }}" class="menu-link">
+                    <li class="menu-item {{ request()->routeIs('admin.user.index.*') ? 'active open' : '' }}">
+                        <a href="{{ route('admin.user.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-table"></i>
                             <div data-i18n="Tables">Data Gunung</div>
                         </a>
@@ -122,78 +106,96 @@
                     <!-- Content -->
 
                     <div class="container-fluid flex-grow-2 container-p-y">
-                        <h4 class="py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Data Gunung</h4>
+                        <h4 class="py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Data User</h4>
 
-                        <!-- Tambah Gunung Button -->
-                        <a href="{{ route('admin.gunung.create') }}" class="btn btn-primary">Tambah</a>
+                        <!-- Tambah User Button -->
+                        <a href="{{ route('admin.user.create') }}" class="btn btn-primary">Tambah</a>
 
                         <!-- Striped Rows -->
                         <div class="card custom-card">
-                            <h5 class="card-header">Data Gunung</h5>
+                            <h5 class="card-header">Data User</h5>
                             <div class="table-responsive text-nowrap">
-                                <table class="table table-striped" style="table-layout: fixed;">
-
+                                <table class="table table-striped table-hover align-middle">
                                     <thead>
                                         <tr>
-                                            <th class="kolom-no">No</th>
-                                            <th>Nama Gunung</th>
-                                            <th class="kolom">Daerah</th>
-                                            <th>Ketinggian</th>
-                                            <th class="kolom">Deskripsi</th>
-                                            <th>Latitude</th>
-                                            <th>Longitude</th>
-                                            <th>Jalur</th>
-                                            <th>Rating</th>
-                                            <th>Gambar</th>
-                                            <th>Aksi</th>
+                                            <th style="width: 40px;">No</th>
+                                            <th style="width: 150px;">Nama Lengkap</th>
+                                            <th style="width: 120px;">Username</th>
+                                            <th style="width: 200px;">Bio</th>
+                                            <th style="width: 120px;">Instagram</th>
+                                            <th style="width: 120px;">TikTok</th>
+                                            <th style="width: 120px;">YouTube</th>
+                                            <th style="width: 80px;">Avatar</th>
+                                            <th style="width: 100px;">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="table-border-bottom-0">
-                                        @foreach ($gunungs as $gunung)
+                                    <tbody>
+                                        @forelse ($users as $index => $user)
                                         <tr>
-                                            <td class="kolom-no">{{ $gunung->id}}</td>
-                                            <td>{{ $gunung->nama }}</td>
-                                            <td class="kolom">{{ $gunung->daerah }}</td>
-                                            <td>{{ number_format($gunung->ketinggian, 3, ',', '.') }} Mdpl</td>
-                                            <td class="kolom">{{ Str::limit($gunung->deskripsi, 50) }}</td>
-                                            <td>{{ number_format($gunung->latitude, 9) }}</td>
-                                            <td>{{ number_format($gunung->longitude, 7) }}</td>
-                                            <td class="column-jalur">
-                                                @if($gunung->jalur)
-                                                <ul>
-                                                    @foreach(explode(',', $gunung->jalur) as $jalur)
-                                                    <li>{{ trim($jalur) }}</li>
-                                                    @endforeach
-                                                </ul>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td class="text-truncate" style="max-width: 150px;">{{ $user->nama_lengkap }}</td>
+                                            <td class="text-truncate" style="max-width: 120px;">{{ $user->username }}</td>
+                                            <td class="text-truncate" style="max-width: 200px;">{{ Str::limit($user->bio, 40) }}</td>
+                                            <td>
+                                                @if ($user->instagram)
+                                                    @php
+                                                        $url = Str::startsWith($user->instagram, ['http://', 'https://']) ? $user->instagram : 'https://' . $user->instagram;
+                                                    @endphp
+                                                    <a href="{{ $url }}" target="_blank" class="text-primary text-decoration-underline">
+                                                        Instagram ({{ $user->nama_lengkap }})
+                                                    </a>
                                                 @else
-                                                N/A
+                                                    <span class="text-muted">-</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $gunung->rating ? $gunung->rating : 'N/A' }}</td>
+                                            
                                             <td>
-                                                @if ($gunung->gambar)
-                                                <img src="{{ asset('storage/' . $gunung->gambar) }}" alt="{{ $gunung->nama }}" class="img-fluid" style="max-height: 150px; object-fit: cover;">
+                                                @if ($user->tiktok)
+                                                    @php
+                                                        $url = Str::startsWith($user->tiktok, ['http://', 'https://']) ? $user->tiktok : 'https://' . $user->tiktok;
+                                                    @endphp
+                                                    <a href="{{ $url }}" target="_blank" class="text-primary text-decoration-underline">
+                                                        TikTok ({{ $user->nama_lengkap }})
+                                                    </a>
                                                 @else
-                                                <p>No Image</p>
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
+                                            
+                                            <td>
+                                                @if ($user->youtube)
+                                                    @php
+                                                        $url = Str::startsWith($user->youtube, ['http://', 'https://']) ? $user->youtube : 'https://' . $user->youtube;
+                                                    @endphp
+                                                    <a href="{{ $url }}" target="_blank" class="text-primary text-decoration-underline">
+                                                        YouTube ({{ $user->nama_lengkap }})
+                                                    </a>
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
+                                            
+                                            <td>
+                                                @if ($user->avatar)
+                                                    <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="img-thumbnail" style="height: 50px; width: 50px; object-fit: cover;">
+                                                @else
+                                                    <span class="text-muted">-</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="dropdown">
-                                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                                    </button>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="{{ route('admin.gunung.edit', $gunung->id) }}"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                                                        <form action="{{ route('admin.gunung.destroy', $gunung->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="dropdown-item"><i class="bx bx-trash me-1"></i> Delete</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
+                                                <a href="{{ route('admin.user.edit', $user->id_user) }}" class="btn btn-sm btn-warning mb-1">Edit</a>
+                                                <form action="{{ route('admin.user.destroy', $user->id_user) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-sm btn-danger">Hapus</button>
+                                                </form>
                                             </td>
                                         </tr>
-                                        @endforeach
+                                        @empty
+                                        <tr>
+                                            <td colspan="9" class="text-center text-muted">Tidak ada data</td>
+                                        </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

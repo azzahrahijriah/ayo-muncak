@@ -56,6 +56,12 @@
                             <div data-i18n="Tours">Data Tour</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ request()->routeIs('admin.user.index') ? 'active open' : '' }}">
+                        <a href="{{ route('admin.user.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-user"></i>
+                            <div data-i18n="Tables">Data User</div>
+                        </a>
+                    </li>
                 </ul>
             </aside>
             <!-- / Menu -->

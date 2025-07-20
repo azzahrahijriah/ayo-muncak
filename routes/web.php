@@ -7,6 +7,7 @@ use App\Http\Controllers\{
     AdminGunungController,
     AdminPengalamanController,
     AdminTourController,
+    AdminUserController,
     TourController,
     PengalamanController,
     UserController
@@ -66,4 +67,5 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::resource('gunung', AdminGunungController::class);
     Route::resource('pengalaman', AdminPengalamanController::class);
     Route::resource('tour', AdminTourController::class);
+    Route::resource('user', AdminUserController::class);
 });

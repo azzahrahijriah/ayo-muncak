@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Tambah Pengalaman</title>
+    <title>Dashboard Admin</title>
     <meta name="description" content="" />
     <link rel="icon" type="image/x-icon" href="{{ asset('asset/img/favicon/favicon.png') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,6 +18,16 @@
     <link rel="stylesheet" href="{{ asset('asset/vendor/libs/apex-charts/apex-charts.css') }}" />
     <script src="{{ asset('asset/vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('asset/js/config.js') }}"></script>
+
+    <style>
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+    </style>
+
 </head>
 
 <body>
@@ -38,8 +48,8 @@
                             <div data-i18n="Dashboards">Dashboard Admin</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ request()->routeIs('admin.gunung.index') ? 'active open' : '' }}">
-                        <a href="{{ route('admin.gunung.index') }}" class="menu-link">
+                    <li class="menu-item {{ request()->routeIs('admin.user.index.*') ? 'active open' : '' }}">
+                        <a href="{{ route('admin.user.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-table"></i>
                             <div data-i18n="Tables">Data Gunung</div>
                         </a>
@@ -94,63 +104,83 @@
                 <!-- Content wrapper -->
                 <div class="content-wrapper">
                     <!-- Content -->
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        <h4 class="py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Tambah Pengalaman</h4>
 
-                        <!-- Basic Forms -->
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <h4 class="py-3 mb-4">
+                            <span class="text-muted fw-light">Tables /</span> Tambah User
+                        </h4>
+                    
                         <div class="card">
-                            <h5 class="card-header">Tambah Pengalaman</h5>
+                            <h5 class="card-header">Form Tambah User</h5>
                             <div class="card-body">
-                                <form action="{{ route('admin.pengalaman.store') }}" method="POST">
+                                <form action="{{ route('admin.user.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    <!-- Form fields for adding an experience -->
+                    
                                     <div class="mb-3">
-                                        <label for="id" class="form-label">Gunung</label>
-                                        <select class="form-select" id="id" name="id" required>
-                                            <option value="">Pilih Gunung</option>
-                                            @foreach ($gunungs as $gunung)
-                                            <option value="{{ $gunung->id }}">{{ $gunung->nama }}</option>
-                                            @endforeach
-                                        </select>
+                                        <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
+                                        <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" required>
                                     </div>
+                    
                                     <div class="mb-3">
-                                        <label for="nama" class="form-label">Nama</label>
-                                        <input type="text" class="form-control" id="nama" name="nama" required>
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username" required>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="tanggal" class="form-label">Tanggal</label>
-                                        <input type="date" class="form-control" id="tanggal" name="tanggal" required>
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password" required>
                                     </div>
+                    
                                     <div class="mb-3">
-                                        <label for="deskripsi" class="form-label">Deskripsi</label>
-                                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" required></textarea>
+                                        <label for="bio" class="form-label">Bio</label>
+                                        <textarea class="form-control" id="bio" name="bio" rows="3"></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Tambah</button>
-                                    <a href="{{ route('admin.pengalaman.index') }}" class="btn btn-secondary">Kembali</a>
+                    
+                                    <div class="mb-3">
+                                        <label for="instagram" class="form-label">Instagram</label>
+                                        <input type="text" class="form-control" id="instagram" name="instagram" placeholder="contoh: instagram.com/namakamu">
+                                    </div>
+                    
+                                    <div class="mb-3">
+                                        <label for="tiktok" class="form-label">TikTok</label>
+                                        <input type="text" class="form-control" id="tiktok" name="tiktok" placeholder="contoh: tiktok.com/@namakamu">
+                                    </div>
+                    
+                                    <div class="mb-3">
+                                        <label for="youtube" class="form-label">YouTube</label>
+                                        <input type="text" class="form-control" id="youtube" name="youtube" placeholder="contoh: youtube.com/@namakamu">
+                                    </div>
+                    
+                                    <div class="mb-3">
+                                        <label for="avatar" class="form-label">Avatar (Foto Profil)</label>
+                                        <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
+                                    </div>
+                    
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <a href="{{ route('admin.user.index') }}" class="btn btn-secondary">Kembali</a>
                                 </form>
                             </div>
                         </div>
-
-
-                        <div class="content-backdrop fade"></div>
                     </div>
-                    <!-- Content wrapper -->
+                    <div class="content-backdrop fade"></div>
                 </div>
-                <!-- / Layout page -->
+                <!-- Content wrapper -->
             </div>
-
-            <!-- Overlay -->
-            <div class="layout-overlay layout-menu-toggle"></div>
+            <!-- / Layout page -->
         </div>
-        <!-- / Layout wrapper -->
 
-        <script src="{{ asset('asset/vendor/libs/jquery/jquery.js') }}"></script>
-        <script src="{{ asset('asset/vendor/libs/popper/popper.js') }}"></script>
-        <script src="{{ asset('asset/vendor/js/bootstrap.js') }}"></script>
-        <script src="{{ asset('asset/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-        <script src="{{ asset('asset/vendor/js/menu.js') }}"></script>
-        <script src="{{ asset('asset/js/main.js') }}"></script>
-        <script async defer src="https://buttons.github.io/buttons.js"></script>
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <script src="{{ asset('asset/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('asset/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('asset/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('asset/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+    <script src="{{ asset('asset/vendor/js/menu.js') }}"></script>
+    <script src="{{ asset('asset/js/main.js') }}"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 
 </html>
