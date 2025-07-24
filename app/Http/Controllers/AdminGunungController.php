@@ -53,7 +53,7 @@ class AdminGunungController extends Controller
             'longitude' => 'required|numeric',
             'jalur' => 'required|string|max:255',
             'rating' => 'required|numeric|min:0|max:5',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:5048',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:10948',
         ]);
 
         DB::beginTransaction();
@@ -109,7 +109,7 @@ class AdminGunungController extends Controller
             'longitude' => 'required|numeric',
             'jalur' => 'nullable|string|max:255',
             'rating' => 'nullable|numeric|min:0|max:5',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:5048',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:10948',
         ]);
     
         DB::beginTransaction();
