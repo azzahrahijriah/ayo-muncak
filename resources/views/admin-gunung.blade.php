@@ -171,7 +171,7 @@
                             <h5 class="card-header">Data Gunung</h5>
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-striped table-hover custom-striped-table" style="table-layout: fixed;">
-                                    <thead class="table-dark">
+                                    <thead class="table">
                                         <tr>
                                             <th class="kolom-no">No</th>
                                             <th class="kolom-nama">Nama Gunung</th>
