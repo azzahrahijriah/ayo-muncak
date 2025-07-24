@@ -19,30 +19,69 @@
     <script src="{{ asset('asset/vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('asset/js/config.js') }}"></script>
 
-    <style>
-        .table .column-jalur {
-            max-width: 150px;
-            /* Atur lebar kolom sesuai kebutuhan */
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .kolom {
-    width: 300px;
-    white-space: nowrap; /* Agar tidak pecah baris */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Tambahkan jika ingin "..." saat terlalu panjang */
-}
-.kolom-no {
-    width: 10px;
-    white-space: nowrap; /* Agar tidak pecah baris */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Tambahkan jika ingin "..." saat terlalu panjang */
-}
+   <style>
+    /* Background selang-seling */
+    .baris-orange {
+        background-color: #FFF3E0; /* orange muda */
+    }
 
+    .baris-putih {
+        background-color: #FFFFFF;
+    }
 
+    /* Kolom Lebar Fixed dan Potong Teks */
+    .kolom-no {
+        width: 40px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-    </style>
+    .kolom-nama {
+        width: 140px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .kolom-daerah {
+        width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .kolom-tinggi {
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .kolom-deskripsi {
+        width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .kolom-jalur {
+        width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .table thead th {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table tbody td {
+        vertical-align: top;
+    }
+</style>
+
 
 </head>
 
@@ -131,18 +170,17 @@
                         <div class="card custom-card">
                             <h5 class="card-header">Data Gunung</h5>
                             <div class="table-responsive text-nowrap">
-                                <table class="table table-striped" style="table-layout: fixed;">
-
-                                    <thead>
+                                <table class="table table-striped table-hover custom-striped-table" style="table-layout: fixed;">
+                                    <thead class="table-dark">
                                         <tr>
                                             <th class="kolom-no">No</th>
-                                            <th>Nama Gunung</th>
-                                            <th class="kolom">Daerah</th>
-                                            <th>Ketinggian</th>
-                                            <th class="kolom">Deskripsi</th>
+                                            <th class="kolom-nama">Nama Gunung</th>
+                                            <th class="kolom-daerah">Daerah</th>
+                                            <th class="kolom-tinggi">Ketinggian</th>
+                                            <th class="kolom-deskripsi">Deskripsi</th>
                                             <th>Latitude</th>
                                             <th>Longitude</th>
-                                            <th>Jalur</th>
+                                            <th class="kolom-jalur">Jalur</th>
                                             <th>Rating</th>
                                             <th>Gambar</th>
                                             <th>Aksi</th>
@@ -150,54 +188,59 @@
                                     </thead>
                                     <tbody class="table-border-bottom-0">
                                         @foreach ($gunungs as $index => $gunung)
-                                        <tr>
-                                            <td class="kolom-no">{{ $index + 1}}</td>
-                                            <td>{{ $gunung->nama }}</td>
-                                            <td class="kolom">{{ $gunung->daerah }}</td>
-                                            <td>{{ number_format($gunung->ketinggian, 3, ',', '.') }} Mdpl</td>
-                                            <td class="kolom">{{ Str::limit($gunung->deskripsi, 50) }}</td>
-                                            <td>{{ number_format($gunung->latitude, 9) }}</td>
-                                            <td>{{ number_format($gunung->longitude, 7) }}</td>
-                                            <td class="column-jalur">
-                                                @if($gunung->jalur)
-                                                <ul>
-                                                    @foreach(explode(',', $gunung->jalur) as $jalur)
-                                                    <li>{{ trim($jalur) }}</li>
-                                                    @endforeach
-                                                </ul>
-                                                @else
-                                                N/A
-                                                @endif
-                                            </td>
-                                            <td>{{ $gunung->rating ? $gunung->rating : 'N/A' }}</td>
-                                            <td>
-                                                @if ($gunung->gambar)
-                                                <img src="{{ asset('storage/' . $gunung->gambar) }}" alt="{{ $gunung->nama }}" class="img-fluid" style="max-height: 150px; object-fit: cover;">
-                                                @else
-                                                <p>No Image</p>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                                    </button>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="{{ route('admin.gunung.edit', $gunung->id) }}"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                                                        <form action="{{ route('admin.gunung.destroy', $gunung->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="dropdown-item"><i class="bx bx-trash me-1"></i> Delete</button>
-                                                        </form>
+                                            <tr class="{{ $index % 2 == 0 ? 'baris-orange' : 'baris-putih' }}">
+                                                <td class="kolom-no">{{ $index + 1}}</td>
+                                                <td class="kolom-nama">{{ $gunung->nama }}</td>
+                                                <td class="kolom-daerah">{{ $gunung->daerah }}</td>
+                                                <td class="kolom-tinggi">{{ number_format($gunung->ketinggian, 0, ',', '.') }} Mdpl</td>
+                                                <td class="kolom-deskripsi">{{ Str::limit($gunung->deskripsi, 50) }}</td>
+                                                <td>{{ number_format($gunung->latitude, 6) }}</td>
+                                                <td>{{ number_format($gunung->longitude, 6) }}</td>
+                                                <td class="kolom-jalur">
+                                                    @if($gunung->jalur)
+                                                        <ul>
+                                                            @foreach(explode(',', $gunung->jalur) as $jalur)
+                                                                <li>{{ trim($jalur) }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>{{ $gunung->rating ?? 'N/A' }}</td>
+                                                <td>
+                                                    @if ($gunung->gambar)
+                                                        <img src="{{ asset('storage/' . $gunung->gambar) }}" alt="{{ $gunung->nama }}" class="img-fluid" style="max-height: 100px; object-fit: cover;">
+                                                    @else
+                                                        <p>No Image</p>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <a class="dropdown-item" href="{{ route('admin.gunung.edit', $gunung->id) }}">
+                                                                <i class="bx bx-edit-alt me-1"></i> Edit
+                                                            </a>
+                                                            <form action="{{ route('admin.gunung.destroy', $gunung->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="dropdown-item">
+                                                                    <i class="bx bx-trash me-1"></i> Delete
+                                                                </button>
+                                                            </form>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                        
                         <!--/ Striped Rows -->
                     </div>
                     <!-- / Content -->
