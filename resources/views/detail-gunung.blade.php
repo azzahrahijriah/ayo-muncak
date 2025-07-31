@@ -464,7 +464,7 @@
 
                             <div>
                                 <h5>
-                                    <a href="#">{{ $exp->user->username ?? 'User tidak diketahui' }}</a>
+                                    <a href="#">{{ $exp->user->username ?? 'Anonymous' }}</a>
                                     <br>
                                     <small>{{ $exp->user->nama_lengkap ?? '-' }}</small>
                                 </h5>
