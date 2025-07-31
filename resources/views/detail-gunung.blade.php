@@ -50,35 +50,36 @@
             <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
                 <h1 class="sitename">AyoMuncak</h1><span>.</span>
             </a>
-<!-- NAVIGASI BAR -->
-<nav id="navmenu" class="navmenu">
-    <ul>
-        <!-- Arah ke route 'beranda' -->
-        <li><a href="{{ route('beranda') }}">Beranda</a></li>
+            <!-- NAVIGASI BAR -->
+            <nav id="navmenu" class="navmenu">
+                <ul>
+                    <!-- Arah ke route 'beranda' -->
+                    <li><a href="{{ route('beranda') }}">Beranda</a></li>
 
-        <!-- Scroll dalam halaman beranda -->
-        <li><a href="{{ route('beranda') }}#about">Tentang</a></li>
-        <li><a href="{{ route('beranda') }}#assistance">Pelayanan</a></li>
-        <li><a href="{{ route('beranda') }}#favorite">Favorit</a></li>
-        <li><a href="{{ route('beranda') }}#faq">Tips</a></li>
-        <li><a href="{{ route('jelajah') }}">Jelajah</a></li>
-        <li><a href="{{ route('beranda') }}#contact">Kontak</a></li>
+                    <!-- Scroll dalam halaman beranda -->
+                    <li><a href="{{ route('beranda') }}#about">Tentang</a></li>
+                    <li><a href="{{ route('beranda') }}#assistance">Pelayanan</a></li>
+                    <li><a href="{{ route('beranda') }}#favorite">Favorit</a></li>
+                    <li><a href="{{ route('beranda') }}#faq">Tips</a></li>
+                    <li><a href="{{ route('jelajah') }}">Jelajah</a></li>
+                    <li><a href="{{ route('beranda') }}#contact">Kontak</a></li>
 
-        @auth('web')
-            <li><a href="{{ route('akun') }}">Akun</a></li>
-            <li>
-                <!-- Logout dengan tampilan seperti link biasa -->
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-            </li>
-        @else
-            <li><a href="{{ route('login') }}">Login</a></li>
-        @endauth
-    </ul>
-    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-</nav>
+                    @auth('web')
+                        <li><a href="{{ route('akun') }}">Akun</a></li>
+                        <li>
+                            <!-- Logout dengan tampilan seperti link biasa -->
+                            <a href="#"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
+                    @else
+                        <li><a href="{{ route('login') }}">Login</a></li>
+                    @endauth
+                </ul>
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </nav>
 
         </div>
     </header>
@@ -146,7 +147,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                
+
 
                                 <div class="content text-left">
                                     <p>{{ $gunung->deskripsi }}</p>
@@ -180,7 +181,7 @@
 
                                     <!-- Loading indicator -->
                                     <div id="map-loading"
-                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
                                         background: rgba(255,255,255,0.9); padding: 20px; border-radius: 10px; display: none;">
                                         <div class="text-center">
                                             <div class="spinner-border text-primary" role="status"></div>
@@ -239,10 +240,9 @@
 
                                 @auth('web')
                                     @php
-                                        $favorit = \App\Models\FavoritGunung::where('id_user', auth('web')->id()
-                                        )
-                                                    ->where('id_gunung', $gunung->id)
-                                                    ->first();
+                                        $favorit = \App\Models\FavoritGunung::where('id_user', auth('web')->id())
+                                            ->where('id_gunung', $gunung->id)
+                                            ->first();
                                     @endphp
 
                                     @if ($favorit)
@@ -263,7 +263,8 @@
                                     @endif
                                 @else
                                     <div class="alert alert-light text-center mb-3">
-                                        <i class="bi bi-heart"></i> <a href="{{ route('login') }}">Login</a> untuk simpan gunung ke daftar favoritmu.
+                                        <i class="bi bi-heart"></i> <a href="{{ route('login') }}">Login</a> untuk simpan
+                                        gunung ke daftar favoritmu.
                                     </div>
                                 @endauth
 
@@ -282,154 +283,160 @@
                                 </ul>
 
                                 @auth('web')
-                                <div class="weather-forecast-container">
-                            
-                                    <div class="weather-header">
-                                        <h2 class="weather-title">🌤️ Prakiraan Cuaca 
-                                            <a class="weather-title" href="{{ route('gunung.show', $gunung->id) }}">
-                                                {{ $gunung->nama }}
-                                            </a>
-                                        </h2>
-                                        <p class="weather-subtitle">Detail prakiraan cuaca 3 jam per periode untuk 5 hari ke depan</p>
+                                    <div class="weather-forecast-container">
+                                        <div class="weather-header">
+                                            <h2 class="weather-title">🌤️ Prakiraan Cuaca
+                                                <a class="weather-title" href="{{ route('gunung.show', $gunung->id) }}">
+                                                    {{ $gunung->nama }}
+                                                </a>
+                                            </h2>
+                                            <p class="weather-subtitle">Detail prakiraan cuaca 3 jam per periode untuk 5
+                                                hari ke depan</p>
+                                        </div>
+
+                                        <div class="weather-content">
+                                            <div class="info-box">
+                                                <div class="info-title">💡 Klik Untuk Melihat Detail</div>
+                                                <div class="info-text">
+                                                    Anda dapat mengklik kolom jam, suhu atau icon cuaca di bawah ini untuk
+                                                    mendapatkan informasi lebih detail per periode 3 jam.
+                                                </div>
+                                            </div>
+                                            @php
+                                                $groupedByDate = collect($forecast['hourly'])->groupBy(function (
+                                                    $item,
+                                                ) {
+                                                    return date('l, d M Y', $item['dt']);
+                                                });
+                                            @endphp
+
+                                            @foreach ($groupedByDate as $date => $items)
+                                                <div class="day-section">
+                                                    <div class="day-header">
+                                                        📅 {{ $date }}
+                                                    </div>
+                                                    <div class="hourly-grid">
+                                                        @foreach ($items as $item)
+                                                            @php
+                                                                $temp = round($item['main']['temp']);
+                                                                $tempClass =
+                                                                    $temp >= 25
+                                                                        ? 'temp-hot'
+                                                                        : ($temp >= 20
+                                                                            ? 'temp-warm'
+                                                                            : ($temp >= 15
+                                                                                ? 'temp-cool'
+                                                                                : 'temp-cold'));
+                                                                $tempEmoji =
+                                                                    $temp >= 20 ? '🔥' : ($temp >= 15 ? '☀️' : '❄️');
+                                                            @endphp
+                                                            <div class="hour-card"
+                                                                onclick="showWeatherDetail('{{ $date }}', '{{ date('H:i', $item['dt']) }}', {{ $temp }}, '{{ $item['weather'][0]['description'] }}', '{{ $item['weather'][0]['main'] }}')">
+                                                                <div class="hour-time">{{ date('H:i', $item['dt']) }}
+                                                                </div>
+                                                                <div class="hour-temp">
+                                                                    {{ $temp }}°C
+                                                                    <span class="temp-badge {{ $tempClass }}">
+                                                                        {{ $tempEmoji }}
+                                                                    </span>
+                                                                </div>
+                                                                <img src="https://openweathermap.org/img/wn/{{ $item['weather'][0]['icon'] }}@2x.png"
+                                                                    alt="{{ $item['weather'][0]['description'] }}"
+                                                                    class="weather-icon">
+                                                                <div class="weather-desc">
+                                                                    {{ $item['weather'][0]['description'] }}</div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+                                            <!-- Weather Modal -->
+                                            <div id="weatherModal" class="weather-modal">
+                                                <div class="weather-modal-content">
+                                                    <div class="weather-modal-header">
+                                                        <button class="weather-close"
+                                                            onclick="closeWeatherModal()">&times;</button>
+                                                        <h4><i class="bi bi-mountain"></i>Prakiraan Cuaca <a
+                                                                href="{{ route('gunung.show', $gunung->id) }}">{{ $gunung->nama }}</a>
+                                                        </h4>
+                                                        <div class="temp-display" id="modal-temp"></div>
+                                                    </div>
+                                                    <div class="weather-modal-body">
+                                                        <div class="weather-section">
+                                                            <h6><i class="bi bi-calendar3"></i> Informasi Waktu</h6>
+                                                            <div class="weather-item">
+                                                                <i class="bi bi-calendar-day text-primary"></i>
+                                                                <span id="modal-day"></span>
+                                                            </div>
+                                                            <div class="weather-item">
+                                                                <i class="bi bi-clock text-success"></i>
+                                                                <span id="modal-time"></span>
+                                                            </div>
+                                                            <div class="weather-item">
+                                                                <i class="bi bi-cloud-sun text-warning"></i>
+                                                                <span id="modal-condition"></span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="weather-section weather-equipment">
+                                                            <h6><i class="bi bi-backpack"></i> SARAN PERLENGKAPAN</h6>
+                                                            <div id="modal-equipment"></div>
+                                                        </div>
+
+                                                        <div class="weather-section weather-advice">
+                                                            <h6><i class="bi bi-exclamation-triangle"></i> CATATAN CUACA
+                                                            </h6>
+                                                            <div id="modal-advice"></div>
+                                                        </div>
+
+                                                        <div class="weather-section weather-tips">
+                                                            <h6><i class="bi bi-lightbulb"></i> TIPS PENDAKIAN</h6>
+                                                            <div class="weather-item">
+                                                                <i class="bi bi-check-circle"></i>
+                                                                <span>Selalu cek cuaca terbaru sebelum mendaki</span>
+                                                            </div>
+                                                            <div class="weather-item">
+                                                                <i class="bi bi-check-circle"></i>
+                                                                <span>Bawa perlengkapan cadangan</span>
+                                                            </div>
+                                                            <div class="weather-item">
+                                                                <i class="bi bi-check-circle"></i>
+                                                                <span>Informasikan rencana perjalanan ke orang
+                                                                    terdekat</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                            
+                                @else
+                                    <div class="weather-header">
+                                        <h2 class="weather-title">🌤️ Prakiraan Cuaca <a class="weather-title"
+                                                href="{{ route('gunung.show', $gunung->id) }}">{{ $gunung->nama }}</a>
+                                        </h2>
+                                        <p class="weather-subtitle">Detail prakiraan cuaca 3 jam per periode untuk 5 hari
+                                            ke depan</p>
+                                    </div>
+
                                     <div class="weather-content">
                                         <div class="info-box">
-                                            <div class="info-title">💡 Klik Untuk Melihat Detail</div>
-                                            <div class="info-text">
-                                                Anda dapat mengklik kolom jam, suhu atau icon cuaca di bawah ini untuk
-                                                mendapatkan informasi lebih detail per periode 3 jam.
-                                            </div>
+                                            <a class="info-title" href="{{ route('login') }}">💡 Login Untuk Melihat
+                                                Prakiraan Cuaca</a>
                                         </div>
-                                        @php
-                                            $groupedByDate = collect($forecast['hourly'])->groupBy(function ($item) {
-                                                return date('l, d M Y', $item['dt']);
-                                            });
-                                        @endphp
-                            
-                                        @foreach ($groupedByDate as $date => $items)
-                                            <div class="day-section">
-                                                <div class="day-header">
-                                                    📅 {{ $date }}
-                                                </div>
-                                                <div class="hourly-grid">
-                                                    @foreach ($items as $item)
-                                                        @php
-                                                            $temp = round($item['main']['temp']);
-                                                            $tempClass =
-                                                                $temp >= 25
-                                                                    ? 'temp-hot'
-                                                                    : ($temp >= 20
-                                                                        ? 'temp-warm'
-                                                                        : ($temp >= 15
-                                                                            ? 'temp-cool'
-                                                                            : 'temp-cold'));
-                                                            $tempEmoji = $temp >= 20 ? '🔥' : ($temp >= 15 ? '☀️' : '❄️');
-                                                        @endphp
-                                                        <div class="hour-card"
-                                                            onclick="showWeatherDetail('{{ $date }}', '{{ date('H:i', $item['dt']) }}', {{ $temp }}, '{{ $item['weather'][0]['description'] }}', '{{ $item['weather'][0]['main'] }}')">
-                                                            <div class="hour-time">{{ date('H:i', $item['dt']) }}</div>
-                                                            <div class="hour-temp">
-                                                                {{ $temp }}°C
-                                                                <span class="temp-badge {{ $tempClass }}">
-                                                                    {{ $tempEmoji }}
-                                                                </span>
-                                                            </div>
-                                                            <img src="https://openweathermap.org/img/wn/{{ $item['weather'][0]['icon'] }}@2x.png"
-                                                                alt="{{ $item['weather'][0]['description'] }}"
-                                                                class="weather-icon">
-                                                            <div class="weather-desc">
-                                                                {{ $item['weather'][0]['description'] }}</div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        @endforeach
+                                    @endauth
 
-                                    <!-- Weather Modal -->
-                                    <div id="weatherModal" class="weather-modal">
-                                        <div class="weather-modal-content">
-                                            <div class="weather-modal-header">
-                                                <button class="weather-close"
-                                                    onclick="closeWeatherModal()">&times;</button>
-                                                <h4><i class="bi bi-mountain"></i>Prakiraan Cuaca <a
-                                                        href="{{ route('gunung.show', $gunung->id) }}">{{ $gunung->nama }}</a>
-                                                </h4>
-                                                <div class="temp-display" id="modal-temp"></div>
-                                            </div>
-                                            <div class="weather-modal-body">
-                                                <div class="weather-section">
-                                                    <h6><i class="bi bi-calendar3"></i> Informasi Waktu</h6>
-                                                    <div class="weather-item">
-                                                        <i class="bi bi-calendar-day text-primary"></i>
-                                                        <span id="modal-day"></span>
-                                                    </div>
-                                                    <div class="weather-item">
-                                                        <i class="bi bi-clock text-success"></i>
-                                                        <span id="modal-time"></span>
-                                                    </div>
-                                                    <div class="weather-item">
-                                                        <i class="bi bi-cloud-sun text-warning"></i>
-                                                        <span id="modal-condition"></span>
-                                                    </div>
-                                                </div>
-
-                                                <div class="weather-section weather-equipment">
-                                                    <h6><i class="bi bi-backpack"></i> SARAN PERLENGKAPAN</h6>
-                                                    <div id="modal-equipment"></div>
-                                                </div>
-
-                                                <div class="weather-section weather-advice">
-                                                    <h6><i class="bi bi-exclamation-triangle"></i> CATATAN CUACA</h6>
-                                                    <div id="modal-advice"></div>
-                                                </div>
-
-                                                <div class="weather-section weather-tips">
-                                                    <h6><i class="bi bi-lightbulb"></i> TIPS PENDAKIAN</h6>
-                                                    <div class="weather-item">
-                                                        <i class="bi bi-check-circle"></i>
-                                                        <span>Selalu cek cuaca terbaru sebelum mendaki</span>
-                                                    </div>
-                                                    <div class="weather-item">
-                                                        <i class="bi bi-check-circle"></i>
-                                                        <span>Bawa perlengkapan cadangan</span>
-                                                    </div>
-                                                    <div class="weather-item">
-                                                        <i class="bi bi-check-circle"></i>
-                                                        <span>Informasikan rencana perjalanan ke orang terdekat</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                
                                 </div>
-                            </div>
 
-                            @else
-                            <div class="weather-header">
-                                <h2 class="weather-title">🌤️ Prakiraan Cuaca <a class="weather-title"
-                                        href="{{ route('gunung.show', $gunung->id) }}">{{ $gunung->nama }}</a>
-                                </h2>
-                                <p class="weather-subtitle">Detail prakiraan cuaca 3 jam per periode untuk 5 hari
-                                    ke depan</p>
-                            </div>
-
-                            <div class="weather-content">
-                                <div class="info-box">
-                                    <a class="info-title" href="{{ route('login') }}">💡 Login Untuk Melihat Prakiraan Cuaca</a>
-                                </div>
-                            @endauth
+                            </article>
 
                         </div>
-
-                    </article>
+                    </div><!-- /Blog Details Section -->
 
                 </div>
-            </div><!-- /Blog Details Section -->
-
-        </div>
-        </div>
+            </div>
         </div>
 
         </div><!-- End post content -->
@@ -448,19 +455,21 @@
                         <div class="d-flex">
                             <div class="comment-img">
                                 @if ($exp->user && $exp->user->avatar)
-                                    <img src="{{ asset('storage/' . $exp->user->avatar) }}" alt="Avatar" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                                    <img src="{{ asset('storage/' . $exp->user->avatar) }}" alt="Avatar"
+                                        style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
                                 @else
                                     <i class="bi bi-person-circle" style="font-size: 2.5rem;"></i>
                                 @endif
                             </div>
-                            
+
                             <div>
                                 <h5>
                                     <a href="#">{{ $exp->user->username ?? 'User tidak diketahui' }}</a>
                                     <br>
                                     <small>{{ $exp->user->nama_lengkap ?? '-' }}</small>
                                 </h5>
-                                <time datetime="{{ $exp->tanggal }}">{{ \Carbon\Carbon::parse($exp->tanggal)->format('d M Y') }}</time>
+                                <time
+                                    datetime="{{ $exp->tanggal }}">{{ \Carbon\Carbon::parse($exp->tanggal)->format('d M Y') }}</time>
                                 <p>{{ $exp->deskripsi }}</p>
                             </div>
                         </div>
@@ -474,7 +483,7 @@
         <section id="comment-form" class="comment-form section">
             <div class="container">
                 @auth('web')
-                <form action="{{ route('pengalaman.store', $gunung->id) }}" method="POST">
+                    <form action="{{ route('pengalaman.store', $gunung->id) }}" method="POST">
                         @csrf
                         <h4>Isi Pengalaman</h4>
 
@@ -488,7 +497,8 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label style="font-weight: bold;">Tanggal Pendakian</label>
-                                <input type="date" name="tanggal_pendakian" class="form-control" placeholder="Tanggal Pendakian" required>
+                                <input type="date" name="tanggal_pendakian" class="form-control"
+                                    placeholder="Tanggal Pendakian" required>
                             </div>
                         </div>
 
@@ -519,12 +529,19 @@
                                 <label style="font-weight: bold;">Resiko Pendakian</label><br>
                                 @php
                                     $risiko = [
-                                        'Terjatuh', 'Kedinginan', 'Tersesat', 'Longsoran Batu',
-                                        'Gas Beracun', 'Binatang Buas', 'Keamanan Pendakian', 'Cuaca Tidak Menentu'
+                                        'Terjatuh',
+                                        'Kedinginan',
+                                        'Tersesat',
+                                        'Longsoran Batu',
+                                        'Gas Beracun',
+                                        'Binatang Buas',
+                                        'Keamanan Pendakian',
+                                        'Cuaca Tidak Menentu',
                                     ];
                                 @endphp
-                                @foreach($risiko as $item)
-                                    <input type="checkbox" name="resiko_pendakian[]" value="{{ $item }}"> {{ $item }}<br>
+                                @foreach ($risiko as $item)
+                                    <input type="checkbox" name="resiko_pendakian[]" value="{{ $item }}">
+                                    {{ $item }}<br>
                                 @endforeach
                             </div>
                         </div>
@@ -532,7 +549,8 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label style="font-weight: bold;">Catatan</label>
-                                <input type="text" name="catatan" class="form-control" placeholder="Catatan" required>
+                                <input type="text" name="catatan" class="form-control" placeholder="Catatan"
+                                    required>
                             </div>
                         </div>
 
@@ -541,11 +559,81 @@
                         </div>
                     </form>
                 @else
-                    <div class="alert alert-info text-center">
-                        <h5>📝 Tulis Pengalaman Pendakian</h5>
-                        <p>Login terlebih dahulu untuk mengisi pengalaman mendaki.</p>
-                        <a href="{{ route('login') }}" class="btn btn-outline-primary">Login Sekarang</a>
-                    </div>
+                    <form action="{{ route('pengalaman.store.guest', $gunung->id) }}" method="POST">
+                        @csrf
+                        <h4>Isi Pengalaman</h4>
+
+                        <!-- Hanya tampilkan nama gunung -->
+                        <div class="col-md-6 form-group">
+                            <label style="font-weight: bold;">Gunung</label>
+                            <input type="text" value="{{ $gunung->nama }}" readonly class="form-control">
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label style="font-weight: bold;">Tanggal Pendakian</label>
+                                <input type="date" name="tanggal_pendakian" class="form-control"
+                                    placeholder="Tanggal Pendakian" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label style="font-weight: bold;">Sampai Puncak?</label>
+                                <select name="sampai_puncak" class="form-control" required>
+                                    <option value="1">Ya</option>
+                                    <option value="0">Tidak</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label style="font-weight: bold;">Tingkat Kesulitan</label>
+                                <select name="tingkat_kesulitan" class="form-control" required>
+                                    <option value="Ringan">Ringan</option>
+                                    <option value="Sedang">Sedang</option>
+                                    <option value="Lupa">Sulit</option>
+                                    <option value="Lupa">Lupa</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label style="font-weight: bold;">Resiko Pendakian</label><br>
+                                @php
+                                    $risiko = [
+                                        'Terjatuh',
+                                        'Kedinginan',
+                                        'Tersesat',
+                                        'Longsoran Batu',
+                                        'Gas Beracun',
+                                        'Binatang Buas',
+                                        'Keamanan Pendakian',
+                                        'Cuaca Tidak Menentu',
+                                    ];
+                                @endphp
+                                @foreach ($risiko as $item)
+                                    <input type="checkbox" name="resiko_pendakian[]" value="{{ $item }}">
+                                    {{ $item }}<br>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label style="font-weight: bold;">Catatan</label>
+                                <input type="text" name="catatan" class="form-control" placeholder="Catatan"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Kirim</button>
+                        </div>
+                    </form>
                 @endauth
             </div>
         </section>
@@ -831,7 +919,7 @@
                     // Update distance info
                     document.getElementById('distance-info').innerHTML = `
                     <span class="text-success">
-                        <i class="bi bi-check-circle"></i> 
+                        <i class="bi bi-check-circle"></i>
                         Jarak: <strong>${distance.toFixed(2)} km</strong>
                     </span>
                 `;

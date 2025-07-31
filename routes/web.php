@@ -47,6 +47,7 @@ Route::middleware('auth:web')->group(function () {
 
     Route::post('/gunung/{id}/tour', [TourController::class, 'store'])->name('tour.store');
 });
+Route::post('/gunung/{id}/pengalaman', [PengalamanController::class, 'storeGuest'])->name('pengalaman.store.guest');
 
 
 /*
