@@ -9,7 +9,7 @@ use App\Models\Tour;
 use App\Models\FavoritGunung;
 use App\Services\WeatherService;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
 
 class GunungController extends Controller
 {
@@ -20,47 +20,68 @@ class GunungController extends Controller
         $gunungTertinggi = Gunung::orderBy('ketinggian', 'desc')->first();
         $gunungTerendah = Gunung::orderBy('ketinggian', 'asc')->first();
         $pengalamans = Pengalaman::with('gunung')->get();
-        $pengalaman = Pengalaman::with('user','gunung')->get();
+        $pengalaman = Pengalaman::with('user', 'gunung')->get();
 
-        return view('index', compact('gunungs', 'pengalamans', 'jumlahGunung', 'gunungTertinggi', 'gunungTerendah', 'pengalaman'));
+        // Mendapatkan 2 gunung paling favorite
+        $gunungFavorit = FavoritGunung::select('id_gunung', DB::raw('count(*) as total'))
+            ->groupBy('id_gunung')
+            ->orderBy('total', 'desc')
+            ->take(2)
+            ->with('gunung')
+            ->get();
+
+        // Ambil data daerah unik dari gunung favorit
+        $daerahFavorit = Gunung::whereIn(
+            'id',
+            FavoritGunung::select('id_gunung')
+                ->groupBy('id_gunung')
+                ->orderByRaw('COUNT(*) DESC')
+                ->limit(2)
+                ->pluck('id_gunung')
+        )
+            ->pluck('provinsi')
+            ->unique()
+            ->implode(', ');
+
+        return view('index', compact('gunungs', 'pengalamans', 'jumlahGunung', 'gunungTertinggi', 'gunungTerendah', 'pengalaman', 'gunungFavorit', 'daerahFavorit'));
     }
 
     public function jelajah(Request $request)
     {
         $query = Gunung::query();
-    
+
         if ($request->has('search') && $request->search != '') {
             $query->where('nama', 'like', '%' . $request->search . '%');
         }
-    
+
         $gunungs = $query->paginate(6)->appends(['search' => $request->search]);
-    
+
         return view('jelajah', compact('gunungs'));
     }
-    
+
 
     public function show($id, WeatherService $weatherService)
     {
         $gunung = Gunung::findOrFail($id);
 
         $forecast = $weatherService->get5DayForecast($gunung->latitude, $gunung->longitude);
-    
+
         $pengalaman = Pengalaman::where('id', $id)->get();
         $tour = Tour::where('id', $id)->get();
-        
+
         $pengalamans = $gunung->pengalaman;
         $tours = $gunung->tour;
         $favoritCount = $gunung->favorit->count();
-        
+
         // Jumlah
         $jumlahPengalaman = $pengalamans->count();
         $jumlahTour = $tours->count();
-        
-    
-        return view('detail-gunung', compact('gunung', 'pengalamans', 'tours' , 'jumlahPengalaman' , 'jumlahTour' , 'favoritCount' , 'pengalaman', 'tour', 'pengalamans', 'forecast'));
+
+
+        return view('detail-gunung', compact('gunung', 'pengalamans', 'tours', 'jumlahPengalaman', 'jumlahTour', 'favoritCount', 'pengalaman', 'tour', 'pengalamans', 'forecast'));
     }
-    
-    
+
+
     public function storePengalaman(Request $request, $id)
     {
         $request->validate([
@@ -85,8 +106,8 @@ class GunungController extends Controller
 
         // Cek apakah sudah ada di favorit sebelumnya
         $favorit = FavoritGunung::where('id_user', $userId)
-                    ->where('id_gunung', $id)
-                    ->first();
+            ->where('id_gunung', $id)
+            ->first();
 
         if (!$favorit) {
             FavoritGunung::create([
