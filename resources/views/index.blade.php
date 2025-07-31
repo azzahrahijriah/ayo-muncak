@@ -28,6 +28,61 @@
 
     <!-- Main CSS File -->
     <link href = "{{ asset('assets/css/main.css') }}" rel = "stylesheet">
+
+    <style>
+        /* Custom Styles */
+        .favorite {
+            background-color: #f8f9fa;
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #FD9B63, #ff6d18);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .title-underline {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #ff6d18, #FD9B63);
+            margin-bottom: 1rem;
+        }
+
+        .favorite-card {
+            border: none;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .favorite-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+        }
+
+        .parallax-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .favorite-card:hover .parallax-img {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 
 <body class = "index-page">
@@ -320,36 +375,73 @@
         </section><!-- END ASSISTANCE SECTION -->
 
         <!-- FAVORITE SECTION -->
-        <section id="favorite" class="favorite section">
-            <!-- Section Title -->
-            <div class="container section-title" data-aos="fade-up">
-                <h2>Favorit</h2>
-                <p>Gunung favorit para pendaki dan wisatawan di {{ $daerahFavorit ?: 'Jawa Timur' }}</p>
-            </div><!-- End Section Title -->
-
+        <section id="favorite" class="favorite section py-5">
+            <!-- Section Title with Animated Underline -->
             <div class="container">
-                @foreach ($gunungFavorit as $index => $favorit)
-                    @if ($favorit->gunung)
-                        {{-- Pastikan relasi gunung ada --}}
-                        <div class="row gy-4 align-items-center favorite-item">
-                            <div class="col-lg-5 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
-                                <h3>{{ $favorit->gunung->nama }}</h3>
-                                <p>{{ $favorit->gunung->deskripsi }}</p>
-                            </div>
-                            <div class="col-lg-7 order-1 order-lg-2 d-flex align-items-center" data-aos="zoom-out"
-                                data-aos-delay="100">
-                                <div class="image-stack">
-                                    <img src="{{ asset('storage/' . $favorit->gunung->gambar) }}"
-                                        alt="{{ $favorit->gunung->nama }}" class="stack-front">
-                                    @if ($index == 0)
-                                        <img src="{{ asset('assets/img/favorite-light-2.jpg') }}" alt=""
-                                            class="stack-back">
-                                    @endif
+                <div class="section-title text-center mb-5" data-aos="fade-up">
+                    <h2 class="display-4 fw-bold text-gradient">Gunung Favorit</h2>
+                    <div class="title-underline mx-auto"></div>
+                    <p class="lead mt-3">Destinasi favorit pendaki di {{ $daerahFavorit ?: 'Jawa Timur' }}</p>
+                </div>
+
+                <div class="row justify-content-center">
+                    @foreach ($gunungFavorit as $index => $favorit)
+                        @if ($favorit->gunung)
+                            <div class="col-lg-6 mb-5" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
+                                <div class="card favorite-card h-100 overflow-hidden shadow-lg">
+                                    <!-- Image with Parallax Effect -->
+                                    <div class="card-img-top position-relative overflow-hidden"
+                                        style="height: 300px;">
+                                        <div class="parallax-img"
+                                            style="background-image: url('{{ asset('storage/' . $favorit->gunung->gambar) }}');">
+                                        </div>
+                                        <div class="card-overlay"></div>
+                                        <div class="position-absolute top-0 end-0 m-3">
+                                            <span class="badge bg-danger px-3 py-2 rounded-pill shadow">
+                                                <i class="bi bi-heart-fill me-1"></i> Favorit
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card Body -->
+                                    <div class="card-body p-4">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <h3 class="h2 fw-bold">{{ $favorit->gunung->nama }}</h3>
+                                            <div class="rating">
+                                                <span class="text-warning">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <i
+                                                            class="bi {{ $i <= $favorit->gunung->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
+                                                    @endfor
+                                                </span>
+                                                <span class="ms-1">({{ $favorit->gunung->rating }})</span>
+                                            </div>
+                                        </div>
+
+                                        <p class="card-text mb-4">{{ Str::limit($favorit->gunung->deskripsi, 200) }}
+                                        </p>
+
+                                        <div class="d-flex flex-wrap gap-2 mb-3">
+                                            <span class="badge bg-light text-dark">
+                                                <i class="bi bi-geo-alt me-1"></i> {{ $favorit->gunung->daerah }}
+                                            </span>
+                                            <span class="badge bg-light text-dark">
+                                                <i class="bi bi-arrow-up me-1"></i> {{ $favorit->gunung->ketinggian }}
+                                                mdpl
+                                            </span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">
+                                                <i class="bi bi-people-fill me-1"></i> {{ $favorit->total }} favorit
+                                            </small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div><!-- favorite Item -->
-                    @endif
-                @endforeach
+                        @endif
+                    @endforeach
+                </div>
             </div>
         </section><!-- END FAVORITE SECTION -->
 
@@ -614,6 +706,35 @@
 
     <!-- MAIN JS FILE -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+
+
+    <script>
+        // Parallax Effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.favorite-card');
+
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const x = e.clientX - card.getBoundingClientRect().left;
+                    const y = e.clientY - card.getBoundingClientRect().top;
+
+                    const centerX = card.offsetWidth / 2;
+                    const centerY = card.offsetHeight / 2;
+
+                    const moveX = (x - centerX) / 20;
+                    const moveY = (y - centerY) / 20;
+
+                    const img = card.querySelector('.parallax-img');
+                    img.style.transform = `scale(1.1) translate(${moveX}px, ${moveY}px)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    const img = card.querySelector('.parallax-img');
+                    img.style.transform = 'scale(1.1) translate(0, 0)';
+                });
+            });
+        });
+    </script>
 
 </body>
 
