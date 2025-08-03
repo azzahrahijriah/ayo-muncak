@@ -43,7 +43,7 @@ Route::middleware('auth:web')->group(function () {
 
 
     Route::get('/pengalaman/tambah', [PengalamanController::class, 'create'])->name('pengalaman.create');
-    Route::post('/gunung/{id}/pengalaman', [PengalamanController::class, 'store'])->name('pengalaman.store');
+    Route::post('/gunung/{id}/pengalaman/user', [PengalamanController::class, 'store'])->name('pengalaman.store');
 
     Route::post('/gunung/{id}/tour', [TourController::class, 'store'])->name('tour.store');
 });

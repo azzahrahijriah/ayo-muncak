@@ -21,7 +21,6 @@ class PengalamanController extends Controller
 
     public function store(Request $request, $id)
     {
-        dd($request->all());
         $request->validate([
             'tanggal_pendakian' => 'required|date',
             'sampai_puncak' => 'required',
