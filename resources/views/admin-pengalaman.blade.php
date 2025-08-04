@@ -120,7 +120,7 @@
                                     <tbody class="table-border-bottom-0">
                                         @foreach ($pengalamans as $pengalaman)
                                         <tr>
-                                            <td>{{ $pengalaman->id_pengalaman}}</td>
+                                            <td>{{ $loop->iteration}}</td>
                                             <td>{{ $pengalaman->id}}</td>
                                             <td>{{ $pengalaman->gunung->nama }}</td>
                                             <td>{{ $pengalaman->nama }}</td>
@@ -132,8 +132,8 @@
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="{{ route('admin.pengalaman.edit', $pengalaman->id) }}"><i class="bx bx-edit-alt me-1"></i> Edit</a>
-                                                        <form action="{{ route('admin.pengalaman.destroy', $pengalaman->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                                        <a class="dropdown-item" href="{{ route('admin.pengalaman.edit', $pengalaman->id_pengalaman) }}"><i class="bx bx-edit-alt me-1"></i> Edit</a>
+                                                        <form action="{{ route('admin.pengalaman.destroy', $pengalaman->id_pengalaman) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="dropdown-item"><i class="bx bx-trash me-1"></i> Delete</button>

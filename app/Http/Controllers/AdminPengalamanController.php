@@ -61,20 +61,17 @@ class AdminPengalamanController extends Controller
     public function destroy($id)
     {
         DB::beginTransaction();
-        
+
         try {
             $pengalaman = Pengalaman::findOrFail($id);
-            
-            // Remove the dd() debug statement in production
-            
             $pengalaman->delete();
-            
+
             DB::commit();
-            
+
             Log::info('Pengalaman deleted - ID: ' . $id);
             return redirect()->route('admin.pengalaman.index')
                    ->with('success', 'Pengalaman berhasil dihapus.');
-                   
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error deleting pengalaman - ID: ' . $id . ' - Error: ' . $e->getMessage());
