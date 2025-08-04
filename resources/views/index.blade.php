@@ -624,7 +624,7 @@
 
 
         <!-- CONTACT SECTION -->
-        <section id="testimonials" class="testimonials section bg-light py-5">
+        <section id="contact" class="testimonials section bg-light py-5">
             <div class="container">
                 <div class="row align-items-center">
 
