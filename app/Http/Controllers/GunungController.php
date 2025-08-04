@@ -43,7 +43,19 @@ class GunungController extends Controller
             ->unique()
             ->implode(', ');
 
-        return view('index', compact('gunungs', 'pengalamans', 'jumlahGunung', 'gunungTertinggi', 'gunungTerendah', 'pengalaman', 'gunungFavorit', 'daerahFavorit'));
+        $contactTours = Tour::all('nama', 'nohp', 'email', 'instagram', 'facebook', 'tiktok');
+
+        return view('index', compact(
+            'gunungs',
+            'pengalamans',
+            'jumlahGunung',
+            'gunungTertinggi',
+            'gunungTerendah',
+            'pengalaman',
+            'gunungFavorit',
+            'daerahFavorit',
+            'contactTours'
+        ));
     }
 
     public function jelajah(Request $request)
