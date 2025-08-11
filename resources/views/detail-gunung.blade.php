@@ -716,10 +716,10 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <input name="facebook" type="text" class="form-control" placeholder="Facebook">
+                            <input name="tiktok" type="text" class="form-control" placeholder="Tiktok">
                         </div>
                         <div class="col-md-6 form-group">
-                            <input name="tiktok" type="text" class="form-control" placeholder="Tiktok">
+                            <input name="portal" type="text" class="form-control" placeholder="Portal Trip">
                         </div>
                     </div>
                     <div class="text-center">
