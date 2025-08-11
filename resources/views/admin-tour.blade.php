@@ -120,7 +120,7 @@
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="table-border-bottom-0">
+                                <tbody class="table-border-bottom-0">
                                         @foreach ($tours as $tour)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>

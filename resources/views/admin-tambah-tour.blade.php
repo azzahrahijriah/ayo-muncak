@@ -132,8 +132,8 @@
                                         <input type="text" id="tiktok" name="tiktok" class="form-control">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="portal" class="form-label">Portal Trip</label>
-                                        <input type="text" id="portal" name="portal" class="form-control">
+                                        <label for="facebook" class="form-label">Portal Trip</label>
+                                        <input type="text" id="facebook" name="facebook" class="form-control">
                                     </div>
                                     <button type="submit" class="btn btn-primary">Tambah</button>
                                     <a href="{{ route('admin.tour.index') }}" class="btn btn-secondary">Kembali</a>

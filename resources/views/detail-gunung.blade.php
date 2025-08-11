@@ -666,7 +666,7 @@
                                 
                                 <p>TikTok:
                                     @if ($t->tiktok)
-                                        <a href="https://www.tiktok.com/@{{ $t->tiktok }}" target="_blank">
+                                        <a href="{{ 'https://www.tiktok.com/@' . $t->tiktok }}" target="_blank">
                                             {{ '@' . $t->tiktok }}
                                         </a>
                                     @else
