@@ -26,7 +26,7 @@ class AdminTourController extends Controller
             'id' => 'required|exists:gunung,id',  
             'nama' => 'required|string|max:255',
             'nohp' => 'required|string|max:15',
-            'email' => 'nullable|email|max:255',  // Validasi untuk kolom email
+            'email' => 'email|max:255',  // Validasi untuk kolom email
             'instagram' => 'nullable|string|max:255',
             'facebook' => 'nullable|string|max:255',
             'tiktok' => 'nullable|string|max:255',
