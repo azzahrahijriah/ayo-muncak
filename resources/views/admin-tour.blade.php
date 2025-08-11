@@ -130,8 +130,8 @@
                                             <td>{{ $tour->nohp }}</td>
                                             <td>{{ $tour->email}}</td>
                                             <td>{{ $tour->instagram }}</td>
-                                            <td>{{ $tour->facebook }}</td>
                                             <td>{{ $tour->tiktok }}</td>
+                                            <td>{{ $tour->facebook }}</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
