@@ -129,12 +129,12 @@
                                         <input type="text" id="instagram" name="instagram" class="form-control" value="{{ old('instagram', $tour->instagram) }}" />
                                     </div>
                                     <div class="mb-3">
-                                        <label for="facebook" class="form-label">Facebook</label>
-                                        <input type="text" id="facebook" name="facebook" class="form-control" value="{{ old('facebook', $tour->facebook) }}" />
-                                    </div>
-                                    <div class="mb-3">
                                         <label for="tiktok" class="form-label">TikTok</label>
                                         <input type="text" id="tiktok" name="tiktok" class="form-control" value="{{ old('tiktok', $tour->tiktok) }}" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="portal" class="form-label">Portal Trip</label>
+                                        <input type="text" id="portal" name="portal" class="form-control" value="{{ old('portal', $tour->facebook) }}" />
                                     </div>
                                     <div class="mb-3">
                                         <button type="submit" class="btn btn-primary">Edit</button>

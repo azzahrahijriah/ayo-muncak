@@ -654,9 +654,35 @@
                                 <h5>{{ $t->nama }}</h5>
                                 <p>Nomor HP: {{ $t->nohp }}</p>
                                 <p>Email: {{ $t->email }}</p>
-                                <p>Instagram: {{ $t->instagram }}</p>
-                                <p>Facebook: {{ $t->facebook }}</p>
-                                <p>TikTok: {{ $t->tiktok }}</p>
+                                <p>Instagram:
+                                    @if ($t->instagram)
+                                        <a href="https://www.instagram.com/{{ $t->instagram }}" target="_blank">
+                                            {{ '@' . $t->instagram }}
+                                        </a>
+                                    @else
+                                        -
+                                    @endif
+                                </p>
+                                
+                                <p>TikTok:
+                                    @if ($t->tiktok)
+                                        <a href="https://www.tiktok.com/@{{ $t->tiktok }}" target="_blank">
+                                            {{ '@' . $t->tiktok }}
+                                        </a>
+                                    @else
+                                        -
+                                    @endif
+                                </p>
+                                
+                                <p>Portal Trip:
+                                    @if ($t->facebook)
+                                        <a href="{{ $t->facebook }}" target="_blank">
+                                            {{ $t->facebook }}
+                                        </a>
+                                    @else
+                                        -
+                                    @endif
+                                </p>                                
                             </div>
                         </div>
                     </div>

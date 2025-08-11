@@ -115,8 +115,8 @@
                                             <th>No HP</th>
                                             <th>Email</th>
                                             <th>Instagram</th>
-                                            <th>Facebook</th>
                                             <th>TikTok</th>
+                                            <th>Portal Trip</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
