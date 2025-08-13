@@ -648,36 +648,7 @@
 
                             </script>
 
-                            <p>Instagram:
-                                @if ($t->instagram)
-                                    <a href="https://www.instagram.com/{{ $t->instagram }}" target="_blank">
-                                        {{ '@' . $t->instagram }}
-                                    </a>
-                                @else
-                                    -
-                                @endif
-                            </p>
-                            
-                            <p>TikTok:
-                                @if ($t->tiktok)
-                                    <a href="{{ 'https://www.tiktok.com/@' . $t->tiktok }}" target="_blank">
-                                        {{ '@' . $t->tiktok }}
-                                    </a>
-                                @else
-                                    -
-                                @endif
-                            </p>
-                            
-                            <p>Portal Trip:
-                                @if ($t->facebook)
-                                    <a href="{{ $t->facebook }}" target="_blank">
-                                        {{ $t->facebook }}
-                                    </a>
-                                @else
-                                    -
-                                @endif
-                            </p>           
-
+                           
                             <div class="swiper-wrapper">
                                 @foreach ($contactTours as $contact)
                                 <div class="swiper-slide">
