@@ -648,6 +648,7 @@
 
                             </script>
 
+
                             <div class="swiper-wrapper">
                                 @foreach ($contactTours as $contact)
                                 <div class="swiper-slide">
@@ -660,8 +661,8 @@
                                             @if($contact->instagram && $contact->instagram !== '-')
                                             <p class="mb-1">
                                                 <i class="bi bi-instagram me-2 text-danger"></i>
-                                                <a href="https://instagram.com/{{ $contact->instagram }}" target="_blank">
-                                                    {{ '@' . $contact->instagram }}
+                                                <a href="https://www.instagram.com/{{ $t->instagram }}" target="_blank">
+                                                    {{ '@' . $t->instagram }}
                                                 </a>
                                             </p>
                                             @endif
@@ -669,8 +670,8 @@
                                             @if($contact->facebook && $contact->facebook !== '-')
                                             <p class="mb-1">
                                                 <i class="bi bi-facebook me-2 text-primary"></i>
-                                                <a href="https://facebook.com/{{ $contact->facebook }}" target="_blank">
-                                                    {{ $contact->facebook }}
+                                                <a href="{{ $t->facebook }}" target="_blank">
+                                                    {{ $t->facebook }}
                                                 </a>
                                             </p>
                                             @endif
@@ -678,8 +679,8 @@
                                             @if($contact->tiktok && $contact->tiktok !== '-')
                                             <p class="mb-1">
                                                 <i class="bi bi-tiktok me-2 text-dark"></i>
-                                                <a href="https://tiktok.com/@{{ $contact->tiktok }}" target="_blank">
-                                                    {{ '@' . $contact->tiktok }}
+                                                <a href="{{ 'https://www.tiktok.com/@' . $t->tiktok }}" target="_blank">
+                                                    {{ '@' . $t->tiktok }}
                                                 </a>
                                             </p>
                                             @endif
