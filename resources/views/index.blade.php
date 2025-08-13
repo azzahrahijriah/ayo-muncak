@@ -648,7 +648,7 @@
 
                             </script>
 
-
+                        
                             <div class="swiper-wrapper">
                                 @foreach ($contactTours as $contact)
                                 <div class="swiper-slide">
