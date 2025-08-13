@@ -648,7 +648,36 @@
 
                             </script>
 
-                        
+                            <p>Instagram:
+                                @if ($t->instagram)
+                                    <a href="https://www.instagram.com/{{ $t->instagram }}" target="_blank">
+                                        {{ '@' . $t->instagram }}
+                                    </a>
+                                @else
+                                    -
+                                @endif
+                            </p>
+                            
+                            <p>TikTok:
+                                @if ($t->tiktok)
+                                    <a href="{{ 'https://www.tiktok.com/@' . $t->tiktok }}" target="_blank">
+                                        {{ '@' . $t->tiktok }}
+                                    </a>
+                                @else
+                                    -
+                                @endif
+                            </p>
+                            
+                            <p>Portal Trip:
+                                @if ($t->facebook)
+                                    <a href="{{ $t->facebook }}" target="_blank">
+                                        {{ $t->facebook }}
+                                    </a>
+                                @else
+                                    -
+                                @endif
+                            </p>           
+
                             <div class="swiper-wrapper">
                                 @foreach ($contactTours as $contact)
                                 <div class="swiper-slide">
@@ -661,17 +690,17 @@
                                             @if($contact->instagram && $contact->instagram !== '-')
                                             <p class="mb-1">
                                                 <i class="bi bi-instagram me-2 text-danger"></i>
-                                                <a href="https://www.instagram.com/{{ $t->instagram }}" target="_blank">
-                                                    {{ '@' . $t->instagram }}
+                                                <a href="https://www.instagram.com/{{ $contact->instagram }}" target="_blank">
+                                                    {{ '@' . $contact->instagram }}
                                                 </a>
                                             </p>
                                             @endif
 
                                             @if($contact->facebook && $contact->facebook !== '-')
                                             <p class="mb-1">
-                                                <i class="bi bi-facebook me-2 text-primary"></i>
-                                                <a href="{{ $t->facebook }}" target="_blank">
-                                                    {{ $t->facebook }}
+                                                <i class="bi bi-browser me-2 text-primary"></i>
+                                                <a href="{{ $contact->facebook }}" target="_blank">
+                                                    {{ $contact->facebook }}
                                                 </a>
                                             </p>
                                             @endif
@@ -679,8 +708,8 @@
                                             @if($contact->tiktok && $contact->tiktok !== '-')
                                             <p class="mb-1">
                                                 <i class="bi bi-tiktok me-2 text-dark"></i>
-                                                <a href="{{ 'https://www.tiktok.com/@' . $t->tiktok }}" target="_blank">
-                                                    {{ '@' . $t->tiktok }}
+                                                <a href="{{ 'https://www.tiktok.com/@' . $contact->tiktok }}" target="_blank">
+                                                    {{ '@' . $contact->tiktok }}
                                                 </a>
                                             </p>
                                             @endif
