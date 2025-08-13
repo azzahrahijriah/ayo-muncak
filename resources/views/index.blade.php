@@ -669,7 +669,7 @@
 
                                             @if($contact->facebook && $contact->facebook !== '-')
                                             <p class="mb-1">
-                                                <i class="bi bi-browser me-2 text-primary"></i>
+                                                <i class="bi bi-globe me-2 text-primary"></i>
                                                 <a href="{{ $contact->facebook }}" target="_blank">
                                                     {{ $contact->facebook }}
                                                 </a>
